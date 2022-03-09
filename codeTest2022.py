@@ -1,3 +1,4 @@
+
 def visual(seatMatrix):
     alphabetLables = ["A","B","C","D","E","F","G","H","I","J","K","L","M"]
     print("  1  2  3  4    5  6  7  8  9  10 11 12 13 14 15 16   17 18 19 20")
@@ -8,25 +9,90 @@ def visual(seatMatrix):
         for j in range(0,20):
             if j == 4 or j == 16: #creates the walkways between row 4-5 and 16-17
                 line += "  "
-            if A320_seats[i][j] == "available":
+            if seatMatrix[i][j] == "available":
                 line +=  "O  "
-            elif A320_seats[i][j] == "unavailable":
+            elif seatMatrix[i][j] == "unavailable":
                 line +=  "X  "
             else:
               line += "   "
         print(line)
 
-A320_seats = []
-blockedSeats = [[2,4],[2,10],[11,18]]
+def avalibleSeatCount(seatMatrix):
+    count = 0
+    for i in seatMatrix:
+        for j in i:
+            if j =="available":
+                count += 1
+    return count
+
+def translateAndValidate(selection):
+    translated = []
+    alphabetLables = ["A","B","C","D","E","F","G","H","I","J","K","L","M"]
+    letter = selection[0]
+    selection= selection[1:]
+    number = selection
+
+    if letter.upper() in alphabetLables:
+        translated.append( alphabetLables.index(letter.upper()))
+        if number.isdigit() and int(number )<= 20:
+            translated.append(int(number)-1)
+            return translated
+        else:
+            return False
+    else:
+        return False
+
+
+
+
+
+movieSeats = []
+blockedSeats = [[2,4],[2,10],[10,18]]
 
 for i in range(0,12):
-    A320_seats.append([])
+    movieSeats.append([])
     for j in range(0,20):
         if i >=3 and i <=9 and j <= 3:
-             A320_seats[i].append("n/a") #blanks out from d1 to k4 as seen in the diagram
+             movieSeats[i].append("n/a") #blanks out from d1 to k4 as seen in the diagram
         else:
-             A320_seats[i].append("available")
+             movieSeats[i].append("available")
 
 for i in blockedSeats:
-    A320_seats[i[0]][i[1]] = "n/a"
-visual(A320_seats)
+    movieSeats[i[0]][i[1]] = "n/a"
+visual(movieSeats)
+bookingName = input("Enter Your Full Name: ")
+booking = True
+while booking:
+    valid = False
+    while not valid:
+        numOfSeats = input("How Many Seats Are You Booking: ")
+        if  numOfSeats.isdigit() :
+            if int(numOfSeats) <= avalibleSeatCount(movieSeats):
+                valid = True
+            else: 
+                print("Not Enough Seats Avalible")
+        else:
+            print("Please Enter A Number")
+    visual(movieSeats)
+    chosenSeats = []
+    for i in range(0,int(numOfSeats)):
+        valid = False
+        while not valid:
+            choice = input("Please Choose A Seat: ")
+            transValid = translateAndValidate(choice)
+            if transValid != False:
+                if movieSeats[transValid[0]][transValid[1]] == "available":
+                    chosenSeats.append(transValid)
+                    valid = True
+                else:
+                    print("Seat Unavalible")
+            else:
+                print("Invalid Seat")
+        print(chosenSeats)
+                
+
+    bookingName = input("Enter Your Full Name: ")
+    if bookingName == "":
+        booking = False
+
+        
