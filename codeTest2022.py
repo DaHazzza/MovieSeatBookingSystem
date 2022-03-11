@@ -1,3 +1,6 @@
+from os import system
+
+
 def visual(seatMatrix):
     alphabetLables = ["A","B","C","D","E","F","G","H","I","J","K","L"]
     print("  1  2  3  4    5  6  7  8  9  10 11 12 13 14 15 16   17 18 19 20")
@@ -44,9 +47,50 @@ def translateAndValidate(selection):
   else:
     return False
 
+def blockAround(seatChoices, seatMatrix):
+    for i in seatChoices:
+        #[1,1]
+        if i[0] != 0 and seatMatrix[i[0]-1][i[1]] == "available": # all seats above
+            seatMatrix[i[0]-1][i[1]] = "unavailable"
+        if i[0] != 11 and seatMatrix[i[0]+1][i[1]] == "available":# all seats below
+            seatMatrix[i[0]+1][i[1]] = "unavailable"
+        if i[1]!=0 and seatMatrix[i[0]][i[1]-1] == "available":# all seats left
+            seatMatrix[i[0]][i[1]-1] = "unavailable"
+        if i[1] != 19 and seatMatrix[i[0]][i[1]+1] == "available":# all seats right
+            seatMatrix[i[0]][i[1]+1] = "unavailable"
+    return seatMatrix
 
-
-
+def bookSeats(seatMatrix):
+    bookingName = input("Enter Your Full Name: ")
+    valid = False
+    while not valid:
+        numOfSeats = input("How Many Seats Are You Booking: ")
+        if  numOfSeats.isdigit() :
+            if int(numOfSeats) <= avalibleSeatCount(seatMatrix):
+                valid = True
+            else: 
+                print("Not Enough Seats Avalible")
+        else:
+            print("Please Enter A Number")
+    visual(seatMatrix)
+    chosenSeats = []
+    for i in range(0,int(numOfSeats)):
+        valid = False
+        while not valid:
+            choice = input("Please Choose A Seat: ")
+            transValid = translateAndValidate(choice)
+            if transValid != False:
+                if seatMatrix[transValid[0]][transValid[1]] == "available":
+                    chosenSeats.append(transValid)
+                    valid = True
+                else:
+                    print("Seat unavailable")
+            else:
+                print("Invalid Seat")
+        seatMatrix[transValid[0]][transValid[1]] = "unavailable"
+    seatMatrix = blockAround(chosenSeats, seatMatrix)
+    visual(seatMatrix)
+    return seatMatrix, bookingName
 
 movieSeats = []
 blockedSeats = [[2,4],[2,10],[10,18]]
@@ -61,46 +105,19 @@ for i in range(0,12):
 
 for i in blockedSeats:
     movieSeats[i[0]][i[1]] = "n/a"
-visual(movieSeats)
-valid = False
-while not valid: 
-  bookingName = input("Enter Your Full Name: ")
-  if bookingName == "":
-    print("Please Enter A Name")
-  else:
-    valid = True
-booking = True
-while booking:
+
+SystemOn = True
+while SystemOn:
     valid = False
     while not valid:
-        numOfSeats = input("How Many Seats Are You Booking: ")
-        if  numOfSeats.isdigit() :
-            if int(numOfSeats) <= avalibleSeatCount(movieSeats):
-                valid = True
-            else: 
-                print("Not Enough Seats Avalible")
-        else:
-            print("Please Enter A Number")
-    visual(movieSeats)
-    chosenSeats = []
-    for i in range(0,int(numOfSeats)):
-        valid = False
-        while not valid:
-            choice = input("Please Choose A Seat: ")
-            transValid = translateAndValidate(choice)
-            if transValid != False:
-                if movieSeats[transValid[0]][transValid[1]] == "available":
-                    chosenSeats.append(transValid)
-                    valid = True
-                else:
-                    print("Seat unavailable")
-            else:
-                print("Invalid Seat")
-        for i in chosenSeats:
-          movieSeats[i[0]][i[1]] = "unavailable"
+        selection = input("Book Seats: 1 \nEmployee Lookup: 2\n")
+        if selection == "2" or selection == "1" or selection == "":
+            valid = True
+    if selection == "1":
+        name =""
+        movieSeats, name = bookSeats(movieSeats)
         visual(movieSeats)
-        #put all arounf chosen seats as unavalible
-
-    bookingName = input("Enter Your Full Name: ")
-    if bookingName == "":
-        booking = False
+    if selection == "2":
+        print("Havent Coded it lol")
+    if selection == "":
+        SystemOn = False
