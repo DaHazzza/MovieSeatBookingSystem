@@ -88,9 +88,10 @@ def bookSeats(seatMatrix):
             else:
                 print("Invalid Seat")
         seatMatrix[transValid[0]][transValid[1]] = "unavailable"
+        nameDict[bookingName] = str([transValid[0],transValid[1]])
     seatMatrix = blockAround(chosenSeats, seatMatrix)
     visual(seatMatrix)
-    return seatMatrix, bookingName
+    return seatMatrix
 
 movieSeats = []
 blockedSeats = [[2,4],[2,10],[10,18]]
@@ -107,6 +108,7 @@ for i in blockedSeats:
     movieSeats[i[0]][i[1]] = "n/a"
 
 SystemOn = True
+nameDict = {}
 while SystemOn:
     valid = False
     while not valid:
@@ -115,9 +117,10 @@ while SystemOn:
             valid = True
     if selection == "1":
         name =""
-        movieSeats, name = bookSeats(movieSeats)
-        visual(movieSeats)
+        movieSeats = bookSeats(movieSeats)
     if selection == "2":
+        print(nameDict)
         print("Havent Coded it lol")
+        #lookup in dictionay and go bbrrr
     if selection == "":
         SystemOn = False
