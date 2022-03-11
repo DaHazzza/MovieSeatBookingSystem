@@ -1,6 +1,5 @@
-
 def visual(seatMatrix):
-    alphabetLables = ["A","B","C","D","E","F","G","H","I","J","K","L","M"]
+    alphabetLables = ["A","B","C","D","E","F","G","H","I","J","K","L"]
     print("  1  2  3  4    5  6  7  8  9  10 11 12 13 14 15 16   17 18 19 20")
     for i in range(0,12):
         line =  f"{alphabetLables[i]} "
@@ -26,21 +25,24 @@ def avalibleSeatCount(seatMatrix):
     return count
 
 def translateAndValidate(selection):
-    translated = []
-    alphabetLables = ["A","B","C","D","E","F","G","H","I","J","K","L","M"]
-    letter = selection[0]
-    selection= selection[1:]
-    number = selection
-
-    if letter.upper() in alphabetLables:
-        translated.append( alphabetLables.index(letter.upper()))
-        if number.isdigit() and int(number )<= 20:
-            translated.append(int(number)-1)
-            return translated
-        else:
-            return False
-    else:
-        return False
+  if selection != "":
+      translated = []
+      alphabetLables = ["A","B","C","D","E","F","G","H","I","J","K","L"]
+      letter = selection[0]
+      selection= selection[1:]
+      number = selection
+  
+      if letter.upper() in alphabetLables:
+          translated.append( alphabetLables.index(letter.upper()))
+          if number.isdigit() and int(number )<= 20:
+              translated.append(int(number)-1)
+              return translated
+          else:
+              return False
+      else:
+          return False
+  else:
+    return False
 
 
 
@@ -60,7 +62,13 @@ for i in range(0,12):
 for i in blockedSeats:
     movieSeats[i[0]][i[1]] = "n/a"
 visual(movieSeats)
-bookingName = input("Enter Your Full Name: ")
+valid = False
+while not valid: 
+  bookingName = input("Enter Your Full Name: ")
+  if bookingName == "":
+    print("Please Enter A Name")
+  else:
+    valid = True
 booking = True
 while booking:
     valid = False
@@ -85,14 +93,14 @@ while booking:
                     chosenSeats.append(transValid)
                     valid = True
                 else:
-                    print("Seat Unavalible")
+                    print("Seat unavailable")
             else:
                 print("Invalid Seat")
-        print(chosenSeats)
-                
+        for i in chosenSeats:
+          movieSeats[i[0]][i[1]] = "unavailable"
+        visual(movieSeats)
+        #put all arounf chosen seats as unavalible
 
     bookingName = input("Enter Your Full Name: ")
     if bookingName == "":
         booking = False
-
-        
