@@ -17,6 +17,7 @@ def visual(seatMatrix):
               line += "   "
         print(line)
 
+
 def avalibleSeatCount(seatMatrix):
     count = 0
     for i in seatMatrix:
@@ -24,6 +25,7 @@ def avalibleSeatCount(seatMatrix):
             if j =="available":
                 count += 1
     return count
+
 
 def translateAndValidate(selection):
   if selection != "":
@@ -35,7 +37,7 @@ def translateAndValidate(selection):
   
       if letter.upper() in alphabetLables:
           translated.append( alphabetLables.index(letter.upper()))
-          if number.isdigit() and int(number )<= 20:
+          if number.isdigit() and int(number )<= 20 and int(number) >=1:
               translated.append(int(number)-1)
               return translated
           else:
@@ -44,6 +46,7 @@ def translateAndValidate(selection):
           return False
   else:
     return False
+
 
 def blockAround(seatChoices, seatMatrix):
     for i in seatChoices:
@@ -58,13 +61,14 @@ def blockAround(seatChoices, seatMatrix):
             seatMatrix[i[0]][i[1]+1] = "unavailable"
     return seatMatrix
 
+
 def bookSeats(seatMatrix):
     bookingName = input("Enter Your Full Name: ")
     valid = False
     while not valid:
         numOfSeats = input("How Many Seats Are You Booking: ")
         if  numOfSeats.isdigit() :
-            if int(numOfSeats) <= avalibleSeatCount(seatMatrix):
+            if int(numOfSeats) <= avalibleSeatCount(seatMatrix) and int(numOfSeats) > 0:
                 valid = True
             else: 
                 print("Not Enough Seats Avalible")
@@ -85,11 +89,13 @@ def bookSeats(seatMatrix):
                     print("Seat unavailable")
             else:
                 print("Invalid Seat")
+        print("Seat Successfully Booked")
         seatMatrix[transValid[0]][transValid[1]] = "unavailable"
-        nameDict[str([transValid[0],transValid[1]])] = bookingName
+        nameDict[str([transValid[0],transValid[1]])] = bookingName #added for part e)
     seatMatrix = blockAround(chosenSeats, seatMatrix)
     visual(seatMatrix)
     return seatMatrix
+
 
 def employeeLookup():
   seatLookup = input("Please Enter A Seat: ")
@@ -101,6 +107,8 @@ def employeeLookup():
       print("That Seat Has Not Been Booked")
   else:
     print("Inavlid Selection")
+
+
 movieSeats = []
 blockedSeats = [[2,4],[2,10],[10,18]]
 
