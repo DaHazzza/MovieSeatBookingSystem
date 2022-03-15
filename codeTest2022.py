@@ -1,5 +1,3 @@
-from os import system
-
 
 def visual(seatMatrix):
     alphabetLables = ["A","B","C","D","E","F","G","H","I","J","K","L"]
@@ -88,11 +86,21 @@ def bookSeats(seatMatrix):
             else:
                 print("Invalid Seat")
         seatMatrix[transValid[0]][transValid[1]] = "unavailable"
-        nameDict[bookingName] = str([transValid[0],transValid[1]])
+        nameDict[str([transValid[0],transValid[1]])] = bookingName
     seatMatrix = blockAround(chosenSeats, seatMatrix)
     visual(seatMatrix)
     return seatMatrix
 
+def employeeLookup():
+  seatLookup = input("Please Enter A Seat: ")
+  translated = translateAndValidate(seatLookup)
+  if translated != False:
+    try:
+      print("This Seat Has Been Booked By "+nameDict[str([translated[0],translated[1]])])
+    except KeyError:
+      print("That Seat Has Not Been Booked")
+  else:
+    print("Inavlid Selection")
 movieSeats = []
 blockedSeats = [[2,4],[2,10],[10,18]]
 
@@ -119,8 +127,6 @@ while SystemOn:
         name =""
         movieSeats = bookSeats(movieSeats)
     if selection == "2":
-        print(nameDict)
-        print("Havent Coded it lol")
-        #lookup in dictionay and go bbrrr
+        employeeLookup()
     if selection == "":
         SystemOn = False
